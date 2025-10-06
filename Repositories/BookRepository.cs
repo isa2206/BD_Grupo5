@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using apiwithdb.Data;
 using apiwithdb.Models;
 using Microsoft.EntityFrameworkCore;
