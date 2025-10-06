@@ -1,19 +1,20 @@
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Add services to the container
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-//scoped solo para db externo y singleton para db en memoria
-builder.Services.AddScoped<apiwithdb.Services.IBookService, apiwithdb.Services.BookService>();
-builder.Services.AddScoped<apiwithdb.Repositories.IBookRepository, apiwithdb.Repositories.BookRepository>();
+// Registrar DbContext para Tickets
+builder.Services.AddDbContext<apiwithdb.Data.AppDbContextTickets>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+
+// Registrar servicios y repositorios de Ticket
+builder.Services.AddScoped<apiwithdb.Services.ITicketService, apiwithdb.Services.TicketService>();
+builder.Services.AddScoped<apiwithdb.Repositories.ITicketRepository, apiwithdb.Repositories.TicketRepository>();
 
 var app = builder.Build();
-// Dependency Injection
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -22,9 +23,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
