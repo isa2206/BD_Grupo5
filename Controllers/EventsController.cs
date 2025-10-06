@@ -6,10 +6,10 @@ namespace apiwithdb.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BooksController : ControllerBase
+    public class EventsController : ControllerBase
     {
-        private readonly IBookService _service;
-        public BooksController(IBookService service)
+        private readonly IEventService _service;
+        public EventsController(IEventService service)
         {
             _service = service;
         }
@@ -23,25 +23,25 @@ namespace apiwithdb.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetOne(Guid id)
         {
-            var book = await _service.GetById(id);
-            return book == null
-                ? NotFound(new { error = "Book not found", status = 404 })
-                : Ok(book);
+            var _event = await _service.GetById(id);
+            return _event == null
+                ? NotFound(new { error = "Event not found", status = 404 })
+                : Ok(_event);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateBookDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateEventDto dto)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
-            var book = await _service.Create(dto);
-            return CreatedAtAction(nameof(GetOne), new { id = book.Id }, book);
+            var _event = await _service.Create(dto);
+            return CreatedAtAction(nameof(GetOne), new { id = _event.Id }, _event);
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var success = await _service.Delete(id);
-            return success ? NoContent() : NotFound(new { error = "Book not found", status = 404 });
+            return success ? NoContent() : NotFound(new { error = "Event not found", status = 404 });
         }
     }
 }
