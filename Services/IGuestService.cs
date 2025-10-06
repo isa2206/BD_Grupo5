@@ -5,9 +5,9 @@ namespace apiwithdb.Services
 {
     public interface IGuestService
     {
-        IEnumerable<Guest> GetAll();
-        Guest? GetById(Guid id);
-        Guest Create(CreateGuestDto dto);
-        bool Delete(Guid id);
+        Task<IEnumerable<Guest>> GetAll();
+        Task<Guest?> GetById(Guid id);
+        Task<Guest> Create(CreateGuestDto dto);
+        Task<bool> Delete(Guid id);
     }
 }

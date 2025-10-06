@@ -6,44 +6,40 @@ namespace apiwithdb.Services
 {
     public class GuestService : IGuestService
     {
-        private readonly IGuestRepository _repo;
-        public GuestService(IGuestRepository repo)
+        private readonly IGuestRepository _rep;
+        public GuestService(IGuestRepository rep)
         {
-            _repo = repo;
+            _rep = rep;
         }
-        public Guest Create(CreateGuestDto dto)
+        public async Task<Guest> Create(CreateGuestDto dto)
         {
-            if (dto.Year < 1900)
-            {
-                throw new InvalidOperationException("Year must be between 1900 and the current year.");
-            }
-            var book = new Guest
+            var g = new Guest
             {
                 Id = Guid.NewGuid(),
-                Title = dto.Title.Trim(),
-                Year = dto.Year
+                FullName = dto.FullName.Trim(),
+                Confirmed = dto.Confirmed
             };
-            _repo.Add(book);
-            return book;
+            await _rep.Add(g);
+            return g;
         }
 
-        public bool Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
-            var existing = _repo.GetById(id);
-            if (existing == null) return false;
-            _repo.Delete(id);
+            var g = _rep.GetById(id);
+            if (g == null) return false;
+            await _rep.Delete(id);
             return true;
         }
 
-        public IEnumerable<Guest> GetAll()
+        public async Task<IEnumerable<Guest>> GetAll()
         {
-            return _repo.GetAll();
+            return await _rep.GetAll();
         }
 
-        public Guest? GetById(Guid id)
+        public async Task<Guest?> GetById(Guid id)
         {
-            var book = _repo.GetById(id);
-            return book;
+            var g = _rep.GetById(id);
+            return await g;
         }
     }
 }
