@@ -24,18 +24,18 @@ namespace apiwithdb.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetOne(Guid id)
         {
-            var book = await _service.GetById(id);
-            return book == null
+            var guest = await _service.GetById(id);
+            return guest == null
                 ? NotFound(new { error = "Guest not found", status = 404 })
-                : Ok(book);
+                : Ok(guest);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateGuestDto dto)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
-            var book = await _service.Create(dto);
-            return CreatedAtAction(nameof(GetOne), new { id = book.Id }, book);
+            var guest = await _service.Create(dto);
+            return CreatedAtAction(nameof(GetOne), new { id = guest.Id }, guest);
         }
 
         [HttpDelete("{id:guid}")]
